@@ -1,0 +1,11 @@
+# Auxiliary files
+*.o
+*.gch
+
+# The output executables
+application
+testsuite
+
+# Ignore the generated documentation, but track the doxyfile
+doc/*
+!doc/doxyfile
