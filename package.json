@@ -7,9 +7,14 @@
   "author": "philippefutureboy <philippe@human.space>, gnoriega27",
   "license": "MIT",
   "private": false,
-  "scripts": {},
+  "scripts": {
+    "build": "mkdirp build && cd build && cmake .. && make",
+    "start": "./build/app/shell-app",
+    "test": "./build/test/cpp-test"
+  },
   "devDependencies": {
-    "cz-conventional-changelog": "^2.1.0"
+    "cz-conventional-changelog": "^2.1.0",
+    "mkdirp": "^0.5.1"
   },
   "config": {
     "commitizen": {
