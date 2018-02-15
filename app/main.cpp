@@ -1,8 +1,9 @@
 #include <iostream>
 #include <lib.hpp>
 
-int main()
-{
-    dummy();
+using namespace std;
+
+int main() {
+    cout << "Works" << endl;
     return 0;
 }
