@@ -6,9 +6,9 @@
 cmake_minimum_required(VERSION 3.5.1)
 project (smallworld VERSION 0.1 LANGUAGES CXX)
 
-# Must use GNUInstallDirs to install libraries into correct
-# locations on all platforms.
-# include(GNUInstallDirs)
+######################################
+# Coverage Flags
+######################################
 
 # Add project cmake modules to path.
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
@@ -34,8 +34,29 @@ include(CMakeToolsHelpers OPTIONAL)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 14)
 
-add_subdirectory(app)
+######################################
+# Vendor Dependencies
+######################################
+
+# Google Test Library
 execute_process(COMMAND git submodule update --init -- vendor/googletest
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(vendor/googletest)
+
+# @nlohmann's JSON Library
+execute_process(COMMAND git submodule update --init -- vendor/json
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+add_subdirectory(vendor/json)
+
+# @arximboldi's Immutable C++ data structures
+execute_process(COMMAND git submodule update --init -- vendor/immer
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+add_subdirectory(vendor/immer)
+
+
+######################################
+# App
+######################################
+
+add_subdirectory(app)
 add_subdirectory(test)
