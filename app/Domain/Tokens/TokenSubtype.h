@@ -1,0 +1,34 @@
+//
+// Created by Gabriel Noriega on 2018-02-15.
+//
+
+#ifndef SMALLWORLD_TOKENSUBTYPE_H
+#define SMALLWORLD_TOKENSUBTYPE_H
+
+
+enum class TokenSubtype {
+    AMAZONS,
+    DWARVES,
+    ELVES,
+    GHOULS,
+    GIANTS,
+    HALFLINGS,
+    HUMANS,
+    ORCS,
+    RATMEN,
+    SKELETONS,
+    SORCERERS,
+    TRITONS,
+    TROLLS,
+    WIZARDS,
+    LOSTTRIBE,
+    TROLLLAIR,
+    FORTESS,
+    ENCAMPMENT,
+    HOLEINTHEGROUND,
+    HERO,
+    DRAGON
+};
+
+
+#endif //SMALLWORLD_TOKENSUBTYPE_H

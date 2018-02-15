@@ -24,7 +24,7 @@ private:
 public:
     Dice() : m_rollTracker(4, 0) {}
 
-    ~Dice() = default;;
+    ~Dice() = default;
 
     int roll();
 
