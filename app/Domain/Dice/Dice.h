@@ -12,10 +12,14 @@ class Dice {
 private:
     int m_totalRolls{0};
 
-    // Holds the times a face has been rolled (0 = blank, 1 ,2 ,3)
+    const int range_from = 0;
+
+    const int range_to = 6;
+
+    // Holds the times a face has been rolled (0 = blank, 1, 2, 3)
     std::vector<int> m_rollTracker;
 
-    // Generate random number between 0 - 6
+    // Generate random number between 1 - 6
     int generateRandomNumber();
 
     // Transform value into 0 - 3 range
@@ -26,10 +30,19 @@ public:
 
     ~Dice() = default;
 
+    // roll the die and return its value
     int roll();
 
-    int getTotalRolls() const { return m_totalRolls; }
+    // returns total times the die has been rolled
+    int getTotalRolls() { return m_totalRolls; }
 
+    // return a vector with the times each number has been rolled
+    std::vector<int> getTotalRollsContainer() const {
+        std::vector<int> copyVector(m_rollTracker);
+        return copyVector;
+    };
+
+    // display the statistics in a formatted way.
     void displayStats() const;
 
 };

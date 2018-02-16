@@ -1,5 +1,4 @@
 #include <iostream>
-#include <lib.hpp>
 
 using namespace std;
 
