@@ -11,18 +11,17 @@
 struct Token {
     TokenType const m_type;
     TokenSubtype const m_subtype;
-    bool m_inDecline{false};
-    bool m_transient{false};
+    bool const m_inDecline;
+    bool const m_transient;
 
-    Token(TokenType v_type, TokenSubtype v_subtype) : m_type(v_type), m_subtype(v_subtype) {}
+    Token(TokenType v_type, TokenSubtype v_subtype) : m_type(v_type), m_subtype(v_subtype), m_inDecline(false),
+                                                      m_transient(false) {}
+
+    Token(TokenType v_type, TokenSubtype v_subtype, bool v_transient) : m_type(v_type), m_subtype(v_subtype),
+                                                                        m_inDecline(false), m_transient(v_transient) {}
 
     ~Token() = default;
 
-    void goInDecline() { m_inDecline = true; }
-
-    void goOutDecline() { m_inDecline = false; }
-
-    void setTransient(bool state) { m_transient = state; }
 };
 
 
