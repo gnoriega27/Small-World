@@ -4,12 +4,12 @@
   "description": "C++ Implementation of the Small World board game – https://boardgamegeek.com/boardgame/40692/small-world",
   "main": "app/main.cpp",
   "repository": "https://github.com/gnoriega27/Small-World",
-  "author": "philippefutureboy <philippe@human.space>, gnoriega27",
+  "author": "philippefutureboy <philippe@human.space>, gnoriega27 <gabrielnoriega27@gmail.com>",
   "license": "MIT",
   "private": false,
   "scripts": {
     "build": "mkdirp build && cd build && cmake .. && make",
-    "start": "./build/app/shell-app",
+    "start": "./build/app/Small-World",
     "test": "./build/test/cpp-test"
   },
   "devDependencies": {

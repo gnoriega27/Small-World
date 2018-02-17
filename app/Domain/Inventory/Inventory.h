@@ -9,7 +9,7 @@
 #include <iostream>
 #include <vector>
 
-template<class T>
+template<typename T>
 class Inventory {
 private:
     typedef std::map<std::string, std::vector<T>> customMapType;
@@ -23,13 +23,17 @@ public:
     customMapType getInventoryCopy() const;
 
     // Returns the inventory - able to modify
-    customMapType getInventroy() const { return m_inventory; }
+    customMapType getInventory() const { return m_inventory; }
 
-    void
     ~Inventory() {
         m_inventory.clear();
     };
 
 };
+
+template<typename T>
+typename Inventory<T>::customMapType Inventory<T>::getInventoryCopy() const {
+    return Inventory<T>::customMapType();
+}
 
 #endif //SMALLWORLD_INVENTORY_H

@@ -15,76 +15,80 @@ class IAbility {
     bool const m_isRaceAbility;
 public:
     IAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens, bool v_isRaceAbility)
-            : m_isRaceAbility(v_isRaceAbility) {}
-};
-
-class IInitialAbility : IAbility {
-public:
-    IInitialAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens, bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+            : m_name(v_name), m_abilityType(v_abilityType), m_tokens(v_tokens), m_isRaceAbility(v_isRaceAbility) {}
 
 };
 
-class IActiveAbility : IAbility {
+
+// First level or inheritance
+
+class IInitialAbility : public IAbility {
 public:
-    IActiveAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens, bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+    IInitialAbility(std::string v_name, unsigned short int v_tokens, bool v_isRaceAbility)
+            : IAbility(v_name, AbilityType::INITIAL, v_tokens, v_isRaceAbility) {}
+
 };
 
-class IDeploymentAbility {
+class IActiveAbility : public IAbility {
 public:
-    IDeploymentAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens, bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+    IActiveAbility(std::string v_name, unsigned short int v_tokens, bool v_isRaceAbility)
+            : IAbility(v_name, AbilityType::ACTIVE, v_tokens, v_isRaceAbility) {}
 };
 
-class IConquerableAbility : IAbility {
+class IDeploymentAbility : public IAbility {
 public:
-    IConquerableAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens,
+    IDeploymentAbility(std::string v_name, unsigned short int v_tokens, bool v_isRaceAbility)
+            : IAbility(v_name, AbilityType::DEPLOYMENT, v_tokens, v_isRaceAbility) {}
+};
+
+class IConquerableAbility : public IAbility {
+public:
+    IConquerableAbility(std::string v_name, unsigned short int v_tokens,
                         bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+            : IAbility(v_name, AbilityType::CONQUERABLE, v_tokens, v_isRaceAbility) {}
 };
 
-class IRedeploymentAbility : IAbility {
+class IRedeploymentAbility : public IAbility {
 public:
-    IRedeploymentAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens,
+    IRedeploymentAbility(std::string v_name, unsigned short int v_tokens,
                          bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+            : IAbility(v_name, AbilityType::REDEPLOYMENT, v_tokens, v_isRaceAbility) {}
 };
 
-class ILossAbility : IAbility {
+class ILossAbility : public IAbility {
 public:
-    ILossAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens, bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+    ILossAbility(std::string v_name, unsigned short int v_tokens, bool v_isRaceAbility)
+            : IAbility(std::string(), AbilityType::LOSS, v_tokens, v_isRaceAbility) {}
 };
 
-class IConquestAbility : IAbility {
+class IConquestAbility : public IAbility {
 public:
-    IConquestAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens, bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+    IConquestAbility(std::string v_name, unsigned short int v_tokens, bool v_isRaceAbility)
+            : IAbility(v_name, AbilityType::CONQUEST, v_tokens, v_isRaceAbility) {}
 };
 
-class IAttackAbility : IAbility {
+class IAttackAbility : public IAbility {
 public:
-    IAttackAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens, bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+    IAttackAbility(std::string v_name, unsigned short int v_tokens, bool v_isRaceAbility)
+            : IAbility(v_name, AbilityType::ATTACK, v_tokens, v_isRaceAbility) {}
 };
 
-class IDefenceAbility : IAbility {
+class IDefenceAbility : public IAbility {
 public:
-    IDefenceAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens, bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+    IDefenceAbility(std::string v_name, unsigned short int v_tokens, bool v_isRaceAbility)
+            : IAbility(v_name, AbilityType::DEFENSE, v_tokens, v_isRaceAbility) {}
 };
 
-class IVictoryAbility : IAbility {
+class IVictoryAbility : public IAbility {
 public:
-    IVictoryAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens, bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+    IVictoryAbility(std::string v_name, unsigned short int v_tokens, bool v_isRaceAbility)
+            : IAbility(v_name, AbilityType::VICTORY, v_tokens, v_isRaceAbility) {}
 };
 
-class IEndTurnAbility : IAbility {
+class IEndTurnAbility : public IAbility {
 public:
-    IEndTurnAbility(std::string v_name, AbilityType v_abilityType, unsigned short int v_tokens, bool v_isRaceAbility)
-            : IAbility(std::string(), v_abilityType, v_tokens, v_isRaceAbility) {}
+    IEndTurnAbility(std::string v_name, unsigned short int v_tokens, bool v_isRaceAbility)
+            : IAbility(v_name, AbilityType::ENDTURN, v_tokens, v_isRaceAbility) {}
 };
 
 #endif //SMALLWORLD_IABILITY_H
