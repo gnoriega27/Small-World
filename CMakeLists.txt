@@ -2,6 +2,7 @@
 # Inspired from
 # * https://rix0r.nl/blog/2015/08/13/cmake-guide/
 # * http://foonathan.net/blog/2016/07/07/cmake-dependency-handling.html
+# * https://www.johnlamp.net/cmake-tutorial-4-libraries-and-subdirectories.html
 
 cmake_minimum_required(VERSION 3.5.1)
 project (smallworld VERSION 0.1 LANGUAGES CXX)
@@ -41,23 +42,22 @@ set(CMAKE_CXX_STANDARD 14)
 # Google Test Library
 execute_process(COMMAND git submodule update --init -- vendor/googletest
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-add_subdirectory(vendor/googletest)
+add_subdirectory(vendor/googletest/googletest)
 
 # @nlohmann's JSON Library
 execute_process(COMMAND git submodule update --init -- vendor/json
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-add_subdirectory(vendor/json)
+include_directories(vendor/json/include)
 
 # @arximboldi's Immutable C++ data structures
 execute_process(COMMAND git submodule update --init -- vendor/immer
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-add_subdirectory(vendor/immer)
+include_directories(vendor/immer)
 
 # @Dobiasd's Functional Programming Library
 execute_process(COMMAND git submodule update --init -- vendor/FunctionalPlus
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-add_subdirectory(vendor/FunctionalPlus)
-
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(vendor/FunctionalPlus/include)
 
 ######################################
 # App
