@@ -3,8 +3,7 @@ set(GTEST_SHUFFLE 1)
 add_executable(
         cpp-test
         main.cpp
-        test.cpp
-        test.cpp)
+        integration/Dice/driverDice.test.cpp integration/Dice/driverDice.test.h integration/Tokens/driverTokens.test.h integration/Tokens/driverTokens.test.cpp)
 
 target_include_directories(cpp-test PUBLIC ../vendor/googletest/googletest/include
         ${CMAKE_SOURCE_DIR}/include)

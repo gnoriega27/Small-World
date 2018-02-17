@@ -1,6 +1,11 @@
-#include <gtest/gtest.h>
+//#include <gtest/gtest.h>
+//#include <iostream>
 
-int main(int argc, char** argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+#include "integration/Dice/driverDice.test.h"
+#include "integration/Tokens/driverTokens.test.h"
+
+int main() {
+    diceDriver();
+    tokenDriver();
+
 }

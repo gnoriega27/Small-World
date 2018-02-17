@@ -27,7 +27,8 @@ enum class TokenSubtype {
     ENCAMPMENT,
     HOLEINTHEGROUND,
     HERO,
-    DRAGON
+    DRAGON,
+    MOUNTAINS
 };
 
 
