@@ -1,0 +1,44 @@
+{
+  "required": ["attributes", "nodes", "edges"],
+  "properties": {
+    "attributes": {
+      "required": ["name", "players", "width", "height"],
+      "properties": {
+        "name": { "type": "string" },
+        "players": { "type": "integer", "minimum": 2, "maximum": 5 },
+        "image": { "type": "string" },
+        "width": { "type": "integer" },
+        "height": { "type": "integer" }
+      }
+    },
+    "nodes": {
+      "minItems": 20,
+      "items": {
+        "required": ["key", "attribute", "type", "border", "lostTribe", "center"],
+        "properties": {
+          "key": { "type": "string" },
+          "attribute": { "type": "string", "enum": ["Cavern", "Magic", "Mine", "Default"] },
+          "type": { "type": "string", "enum": ["Farmland", "Forest", "Hill", "Lake", "Mountain", "Sea", "Swamp"] },
+          "border": { "type": "boolean" },
+          "lostTribe": { "type": "boolean" },
+          "center": {
+            "required": ["x", "y"],
+            "properties": {
+              "x": { "type": "integer" },
+              "y": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "edges": {
+      "items": {
+        "required": ["key", "source", "target"],
+        "properties": {
+          "source": { "type": "string" },
+          "target": { "type": "string" }
+        }
+      }
+    }
+  }
+}
