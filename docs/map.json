@@ -1,0 +1,336 @@
+{
+  "attributes": {
+    "name": "Test Map",
+    "players": 2,
+    "width": 1000,
+    "height": 1000
+  },
+  "nodes": [
+    {
+      "key": "r1",
+      "attribute": "Default",
+      "type": "Sea",
+      "border": true,
+      "lostTribe": false,
+      "center": { "x": 275, "y": 75 }
+    },
+    {
+      "key": "r2",
+      "attribute": "Default",
+      "type": "Farmland",
+      "border": true,
+      "lostTribe": false,
+      "center": { "x": 170, "y": 120 }
+    },
+    {
+      "key": "r3",
+      "attribute": "Cavern",
+      "type": "Forest",
+      "border": true,
+      "lostTribe": true,
+      "center": { "x": 525, "y": 50 }
+    },
+    {
+      "key": "r4",
+      "attribute": "Mine",
+      "type": "Farmland",
+      "border": true,
+      "lostTribe": true,
+      "center": { "x": 410, "y": 175 }
+    },
+    {
+      "key": "r5",
+      "attribute": "Default",
+      "type": "Hill",
+      "border": true,
+      "lostTribe": true,
+      "center": { "x": 665, "y": 85 }
+    },
+    {
+      "key": "r6",
+      "attribute": "Magic",
+      "type": "Swamp",
+      "border": true,
+      "lostTribe": true,
+      "center": { "x": 805, "y": 100 }
+    },
+    {
+      "key": "r7",
+      "attribute": "Cavern",
+      "type": "Forest",
+      "border": true,
+      "lostTribe": false,
+      "center": { "x": 960, "y": 215 }
+    },
+    {
+      "key": "r8",
+      "attribute": "Mine",
+      "type": "Mountain",
+      "border": false,
+      "lostTribe": false,
+      "center": { "x": 735, "y": 270 }
+    },
+    {
+      "key": "r9",
+      "attribute": "Default",
+      "type": "Farmland",
+      "border": false,
+      "lostTribe": false,
+      "center": { "x": 580, "y": 310 }
+    },
+    {
+      "key": "r10",
+      "attribute": "Cavern",
+      "type": "Hill",
+      "border": true,
+      "lostTribe": true,
+      "center": { "x": 325, "y": 290 }
+    },
+    {
+      "key": "r11",
+      "attribute": "Magic",
+      "type": "Swamp",
+      "border": true,
+      "lostTribe": true,
+      "center": { "x": 265, "y": 215 }
+    },
+    {
+      "key": "r12",
+      "attribute": "Default",
+      "type": "Forest",
+      "border": true,
+      "lostTribe": false,
+      "center": { "x": 230, "y": 400 }
+    },
+    {
+      "key": "r13",
+      "attribute": "Default",
+      "type": "Swamp",
+      "border": false,
+      "lostTribe": true,
+      "center": { "x": 380, "y": 430 }
+    },
+    {
+      "key": "r14",
+      "attribute": "Magic",
+      "type": "Farmland",
+      "border": false,
+      "lostTribe": false,
+      "center": { "x": 500, "y": 450 }
+    },
+    {
+      "key": "r15",
+      "attribute": "Default",
+      "type": "Lake",
+      "border": false,
+      "lostTribe": false,
+      "center": { "x": 615, "y": 500 }
+    },
+    {
+      "key": "r16",
+      "attribute": "Magic",
+      "type": "Forest",
+      "border": false,
+      "lostTribe": true,
+      "center": { "x": 855, "y": 350 }
+    },
+    {
+      "key": "r17",
+      "attribute": "Default",
+      "type": "Mountain",
+      "border": true,
+      "lostTribe": false,
+      "center": { "x": 920, "y": 345 }
+    },
+    {
+      "key": "r18",
+      "attribute": "Mine",
+      "type": "Swamp",
+      "border": false,
+      "lostTribe": false,
+      "center": { "x": 860, "y": 480 }
+    },
+    {
+      "key": "r19",
+      "attribute": "Default",
+      "type": "Farmland",
+      "border": true,
+      "lostTribe": false,
+      "center": { "x": 935, "y": 490 }
+    },
+    {
+      "key": "r20",
+      "attribute": "Cavern",
+      "type": "Swamp",
+      "border": true,
+      "lostTribe": true,
+      "center": { "x": 970, "y": 625 }
+    }
+  ],
+  "edges": [
+    {
+      "source": "r1",
+      "target": "r2"
+    },
+    {
+      "source": "r1",
+      "target": "r3"
+    },
+    {
+      "source": "r1",
+      "target": "r4"
+    },
+    {
+      "source": "r1",
+      "target": "r10"
+    },
+    {
+      "source": "r1",
+      "target": "r11"
+    },
+    {
+      "source": "r1",
+      "target": "r12"
+    },
+    {
+      "source": "r2",
+      "target": "r11"
+    },
+    {
+      "source": "r3",
+      "target": "r4"
+    },
+    {
+      "source": "r3",
+      "target": "r5"
+    },
+    {
+      "source": "r4",
+      "target": "r5"
+    },
+    {
+      "source": "r4",
+      "target": "r9"
+    },
+    {
+      "source": "r4",
+      "target": "r10"
+    },
+    {
+      "source": "r5",
+      "target": "r6"
+    },
+    {
+      "source": "r5",
+      "target": "r8"
+    },
+    {
+      "source": "r5",
+      "target": "r9"
+    },
+    {
+      "source": "r6",
+      "target": "r7"
+    },
+    {
+      "source": "r6",
+      "target": "r8"
+    },
+    {
+      "source": "r7",
+      "target": "r8"
+    },
+    {
+      "source": "r7",
+      "target": "r16"
+    },
+    {
+      "source": "r7",
+      "target": "r17"
+    },
+    {
+      "source": "r8",
+      "target": "r9"
+    },
+    {
+      "source": "r8",
+      "target": "r15"
+    },
+    {
+      "source": "r8",
+      "target": "r16"
+    },
+    {
+      "source": "r9",
+      "target": "r10"
+    },
+    {
+      "source": "r9",
+      "target": "r13"
+    },
+    {
+      "source": "r9",
+      "target": "r14"
+    },
+    {
+      "source": "r9",
+      "target": "r15"
+    },
+    {
+      "source": "r10",
+      "target": "r11"
+    },
+    {
+      "source": "r10",
+      "target": "r12"
+    },
+    {
+      "source": "r10",
+      "target": "r13"
+    },
+    {
+      "source": "r11",
+      "target": "r12"
+    },
+    {
+      "source": "r12",
+      "target": "r13"
+    },
+    {
+      "source": "r13",
+      "target": "r14"
+    },
+    {
+      "source": "r14",
+      "target": "r15"
+    },
+    {
+      "source": "r15",
+      "target": "r16"
+    },
+    {
+      "source": "r15",
+      "target": "r18"
+    },
+    {
+      "source": "r16",
+      "target": "r17"
+    },
+    {
+      "source": "r16",
+      "target": "r17"
+    },
+    {
+      "source": "r17",
+      "target": "r18"
+    },
+    {
+      "source": "r18",
+      "target": "r19"
+    },
+    {
+      "source": "r19",
+      "target": "r20"
+    }
+  ]
+}
