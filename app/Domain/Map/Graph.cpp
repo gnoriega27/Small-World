@@ -5,18 +5,19 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <tuple>
+#include <utility>
 #include "Graph.h"
 
 using string = std::string;
 
 namespace SmallWorld{
   namespace Map {
+    using edge_vector = std::vector<bool>;
 
     template <class E>
     Graph<E>::Graph(
-      std::vector<std::tuple<string, E>> nodes,
-      std::vector<std::tuple<string, string>> edges) {
+      std::vector<std::pair<string, E>> nodes,
+      std::vector<std::pair<string, string>> edges) {
         for(const auto& node : nodes){
           addNode(std::get<0>(node), std::get<1>(node));
         }
@@ -55,7 +56,7 @@ namespace SmallWorld{
     template <class E>
     bool Graph<E>::hasNode(const E& e) {
       for(const auto& node : m_nodes) {
-        if(e == node.second){
+        if(e == *(node.second)){
           return true;
         }
       }
@@ -73,7 +74,7 @@ namespace SmallWorld{
       if(!hasNode(src) || !hasNode(dest)) {
         return false;
       }
-      return m_matrix[getIndex(src)][getIndex(dest)];
+      return *(m_matrix[getIndex(src)])[getIndex(dest)];
     };
 
     /**
@@ -87,7 +88,7 @@ namespace SmallWorld{
       if(!hasNode(src) || !hasNode(dest)) {
         return false;
       }
-      return m_matrix[getIndex(src)][getIndex(dest)];
+      return *(m_matrix[getIndex(src)])[getIndex(dest)];
     };
 
     /**
@@ -98,19 +99,20 @@ namespace SmallWorld{
      * @param e   element of the node
      */
     template <class E>
-    Graph<E> Graph<E>::addNode(const string& key, const E& e) {
+    Graph<E>* Graph<E>::addNode(const string& key, const E& e) {
       if(hasNode(key)){
         throw std::invalid_argument("Graph already has Node '" + key + "'");
       }
-      m_nodes.insert(key, e);
-      m_indexes.insert(key, static_cast<short> (m_matrix.size() + 1));
+      const short index = static_cast<short> (m_matrix.size() + 1);
+      m_nodes[key] = std::make_pair<E*, short>(&e, index);
+      m_indexes[index] = &key;
       for(auto& v : m_matrix){
-        v.push_back(false);
+        v->push_back(false);
       }
       //Initialize all values to false;
       std::vector<bool> edges(m_matrix.size() + 1, false);
-      m_matrix.push_back(edges);
-      return this;
+      m_matrix.push_back(&edges);
+      return &this;
     };
 
     /**
@@ -120,13 +122,13 @@ namespace SmallWorld{
      * @param e   element of the node to replace
      */
     template <class E>
-    Graph<E> Graph<E>::replaceNode(const string& key, const E& e) {
+    Graph<E>* Graph<E>::replaceNode(const string& key, const E& e) {
       if(!hasNode(key)){
         throw std::invalid_argument("Node '" + key + "' does not exist in Graph");
       }
-      m_nodes.erase(key);
-      m_nodes.insert(key, e);
-      return this;
+      std::pair<E*, short>* node = &(m_nodes[key]);
+      node->first = e;
+      return &this;
     };
 
     /**
@@ -136,23 +138,14 @@ namespace SmallWorld{
      * @param dest dest key
      */
     template <class E>
-    Graph<E> Graph<E>::addEdge(const string& src, const string& dest) {
+    Graph<E>* Graph<E>::addEdge(const string& src, const string& dest) {
       if(!hasNode(src)){
         throw std::invalid_argument("Node '" + src + "' does not exist in Graph");
       }
       if(!hasNode(dest)){
         throw std::invalid_argument("Node '" + dest + "' does not exist in Graph");
       }
-      short src_index = getIndex(src);
-      short dest_index = getIndex(dest);
-      m_matrix[src_index][dest_index] = true;
-      // If is not directed, make the edge bidirectional
-      if(!m_directed){
-        m_matrix[dest_index][src_index] = true;
-      }
-      // Increase size
-      m_size += 1;
-      return this;
+      return insertEdge(getIndex(src), getIndex(dest));
     };
 
     /**
@@ -162,23 +155,14 @@ namespace SmallWorld{
      * @param dest dest element
      */
     template <class E>
-    Graph<E> Graph<E>::addEdge(const E& src, const E& dest) {
+    Graph<E>* Graph<E>::addEdge(const E& src, const E& dest) {
       if(!hasNode(src)){
         throw std::invalid_argument("Node '" + src + "' does not exist in Graph");
       }
       if(!hasNode(dest)){
         throw std::invalid_argument("Node '" + dest + "' does not exist in Graph");
       }
-      short src_index = getIndex(src);
-      short dest_index = getIndex(dest);
-      m_matrix[src_index][dest_index] = true;
-      // If is not directed, make the edge bidirectional
-      if(!m_directed){
-        m_matrix[dest_index][src_index] = true;
-      }
-      // Increase size
-      m_size += 1;
-      return this;
+      return insertEdge(getIndex(src), getIndex(dest));
     };
 
     /**
@@ -186,12 +170,12 @@ namespace SmallWorld{
      * @complexity O(order)
      */
     template <class E>
-    std::vector<std::tuple<string, E>> Graph<E>::nodes() {
-      std::vector<std::tuple<string, E>> nodes;
+    std::vector<std::pair<string, E*>> Graph<E>::nodes() {
+      std::vector<std::pair<string, E*>> nodes;
       nodes.reserve(m_nodes.size());
       short count = 0;
       for(const auto& node : m_nodes) {
-        nodes.assign(count++, std::make_tuple<string, E>(node.first, node.second));
+        nodes.assign(count++, std::make_pair<string, E>(node.first, &(node.second)));
       }
       return nodes;
     };
@@ -201,17 +185,10 @@ namespace SmallWorld{
      * @complexity O(order + size)
      */
     template <class E>
-    std::vector<std::tuple<string, string>> Graph<E>::edges() {
+    std::vector<std::pair<string, string>> Graph<E>::edges() {
       const short order = m_indexes.size();
-      std::vector<std::tuple<string, string>> edges;
+      std::vector<std::pair<string, string>> edges;
       edges.reserve(m_size);
-
-      // Invert the map
-      std::vector<string> indexes;
-      indexes.reserve(order);
-      for(const auto& index : m_indexes) {
-        indexes[index.second] = index.first;
-      }
 
       // Build the return value
       if(!m_directed){
@@ -220,38 +197,69 @@ namespace SmallWorld{
           // If undirected, only need to read one of the two directions of the edges
           // Which means that if you split the matrix at the diagonal, you can take
           // only the ones at the lower half and you are good
-          for(short i = index.second; i < order; ++i){
-            if(m_matrix[index.second][i]){
-              edges.assign(count++, std::make_tuple<string, string>(index.first, indexes[i]));
+          for(short i = index.first; i < order; ++i){
+            if(*(m_matrix[index.first])[i]){
+              edges.assign(count++, std::make_pair<string, string>(index.second, m_indexes[i].second));
             }
           }
         }
       }else{
+        using szt = std::vector<int>::size_type;
         size_t count = 0;
-        for(std::vector<int>::size_type i = 0; i != m_matrix.size(); i++) {
-          for(std::vector<int>::size_type j = 0; j != m_matrix[i].size(); j++){
-            if(m_matrix[i][j]){
-              std::tuple<string, string> tup (indexes[i], indexes[j]);
+        for(szt i = 0; i != m_matrix.size(); i++) {
+          for(szt j = 0; j != m_matrix[i].size(); j++){
+            if(*(m_matrix[i])[j]){
+              std::pair<string, string> tup (m_indexes[i].second, m_indexes[j].second);
               edges.assign(count++, tup);
             }
           }
         }
       }
       return edges;
-    }
+    };
 
     template <class E>
-    short Graph<E>::getIndex(const string& src) {
-      return m_indexes.at(src);
-    }
+    short Graph<E>::getIndex(const string& key) {
+      return m_nodes.at(key).second;
+    };
 
     template <class E>
     short Graph<E>::getIndex(const E& e) {
       for(const auto& node : m_nodes) {
-        if(e == node.second){
-          return m_indexes.at(node.first);
+        if(e == node.second.first){
+          return node.second.second;
         }
       }
-    }
-  }
-}
+    };
+
+    template <class E>
+    string Graph<E>::getKey(const short index) {
+      return *(m_indexes.at(index));
+    };
+
+    template <class E>
+    Graph<E>* Graph<E>::insertEdge(const short& src_index, const short& dest_index) {
+      // If is not directed, add the edge from the node with the lowest index to
+      // the largest index (reduces calculations for neighbours and edges)
+      if(!m_directed){
+        if(src_index < dest_index){
+          *(m_matrix[src_index])[dest_index] = true;
+        }else if(src_index > dest_index){
+          *(m_matrix[dest_index])[src_index] = true;
+        // src == dest thus reflexive
+        }else if(m_reflexive){
+          *(m_matrix[src_index])[src_index] = true;
+        }
+      }else{
+        if(src_index == dest_index && m_reflexive){
+          *(m_matrix[src_index])[src_index] = true;
+        }else{
+
+        }
+      }
+      // Increase size
+      m_size += 1;
+      return &this;
+    };
+  };
+};
