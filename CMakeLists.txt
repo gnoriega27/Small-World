@@ -53,6 +53,11 @@ execute_process(COMMAND git submodule update --init -- vendor/immer
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(vendor/immer)
 
+# @Dobiasd's Functional Programming Library
+execute_process(COMMAND git submodule update --init -- vendor/FunctionalPlus
+                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+add_subdirectory(vendor/FunctionalPlus)
+
 
 ######################################
 # App

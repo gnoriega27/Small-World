@@ -7,3 +7,6 @@
 [submodule "vendor/immer"]
 	path = vendor/immer
 	url = https://github.com/arximboldi/immer
+[submodule "vendor/FunctionalPlus"]
+	path = vendor/FunctionalPlus
+	url = https://github.com/Dobiasd/FunctionalPlus
