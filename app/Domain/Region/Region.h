@@ -5,7 +5,7 @@
 #define SMALLWORLD_REGION_H
 
 #include <string>
-#include <tuple>
+#include <utility>
 #include <nlohmann/json.hpp>
 #include "RegionAttribute.h"
 #include "RegionType.h"
@@ -17,17 +17,19 @@ namespace SmallWorld{
   class Region {
   public:
     Region(json j);
-    string getKey();
-    RegionAttribute getAttribute();
-    RegionType getType();
-    bool hostsALostTribe();
+    string getKey() const { return m_key; };
+    SmallWorld::RegionAttribute getAttribute() const { return m_attribute; };
+    SmallWorld::RegionType getType() const { return m_type; };
+    bool hostsALostTribe() const { return m_lostTribe; };
+    string getOccupyingRaceID() const { return m_occupiedBy; };
   private:
-    const string m_key;
-    const RegionAttribute m_attribute;
-    const RegionType m_type;
-    const bool m_lostTribe;
-    const bool m_border;
-    const std::tuple<int, int> m_center;
+    string m_key;
+    SmallWorld::RegionAttribute m_attribute;
+    SmallWorld::RegionType m_type;
+    bool m_lostTribe;
+    bool m_border;
+    string m_occupiedBy;
+    std::pair<int, int> m_center;
     static RegionAttribute parseRegionAttribute(const string& attribute);
     static RegionType parseRegionType(const string& type);
   };
