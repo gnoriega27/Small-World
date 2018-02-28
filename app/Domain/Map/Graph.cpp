@@ -106,20 +106,20 @@ namespace SmallWorld{
      * @param e   element of the node
      */
     template <class E>
-    Graph<E>* Graph<E>::addNode(const string& key, const std::shared_ptr<E> e) {
+    Graph<E>& Graph<E>::addNode(const string& key, const std::shared_ptr<E> e) {
       if(hasNode(key)){
         throw std::invalid_argument("Graph already has Node '" + key + "'");
       }
       const short index = static_cast<short> (m_matrix.size() + 1);
-      m_nodes[key] = std::make_pair<std::shared_ptr<E>, short>(e, index);
-      m_indexes[index] = key;
-      for(const auto& v : m_matrix){
+      m_nodes.insert(std::make_pair(key, std::make_pair(e, index)));
+      m_indexes.insert(std::make_pair(index, key));
+      for(auto& v : m_matrix){
         v.push_back(false);
       }
       //Initialize all values to false;
       std::vector<bool> edges(m_matrix.size() + 1, false);
-      m_matrix.push_back(&edges);
-      return &this;
+      m_matrix.push_back(edges);
+      return *this;
     };
 
     /**
@@ -129,13 +129,13 @@ namespace SmallWorld{
      * @param e   element of the node to replace
      */
     template <class E>
-    Graph<E>* Graph<E>::replaceNode(const string& key, const std::shared_ptr<E> e) {
+    Graph<E>& Graph<E>::replaceNode(const string& key, const std::shared_ptr<E> e) {
       if(!hasNode(key)){
         throw std::invalid_argument("Node '" + key + "' does not exist in Graph");
       }
       std::pair<std::shared_ptr<E>, short>* node = &(m_nodes[key]);
       node->first = e;
-      return &this;
+      return *this;
     };
 
     /**
@@ -145,7 +145,7 @@ namespace SmallWorld{
      * @param dest dest key
      */
     template <class E>
-    Graph<E>* Graph<E>::addEdge(const string& src, const string& dest) {
+    Graph<E>& Graph<E>::addEdge(const string& src, const string& dest) {
       if(!hasNode(src)){
         throw std::invalid_argument("Node '" + src + "' does not exist in Graph");
       }
@@ -162,7 +162,7 @@ namespace SmallWorld{
      * @param dest dest element
      */
     template <class E>
-    Graph<E>* Graph<E>::addEdge(const E& src, const E& dest) {
+    Graph<E>& Graph<E>::addEdge(const E& src, const E& dest) {
       if(!hasNode(src)){
         throw std::invalid_argument("Node '" + src + "' does not exist in Graph");
       }
@@ -343,28 +343,28 @@ namespace SmallWorld{
     };
 
     template <class E>
-    Graph<E>* Graph<E>::insertEdge(const short& src_index, const short& dest_index) {
+    Graph<E>& Graph<E>::insertEdge(const short& src_index, const short& dest_index) {
       // If is not directed, add the edge from the node with the lowest index to
       // the largest index (reduces calculations for neighbours and edges)
       if(!m_directed){
         if(src_index < dest_index){
-          m_matrix[src_index][dest_index] = true;
+          m_matrix[src_index].at(dest_index) = true;
         }else if(src_index > dest_index){
-          m_matrix[dest_index][src_index] = true;
+          m_matrix[dest_index].at(src_index) = true;
         // src == dest thus reflexive
         }else if(m_reflexive){
-          m_matrix[src_index][src_index] = true;
+          m_matrix[src_index].at(src_index) = true;
         }
       }else{
         if(src_index == dest_index && m_reflexive){
-          m_matrix[src_index][src_index] = true;
+          m_matrix[src_index].at(src_index) = true;
         }else{
-          m_matrix[src_index][dest_index] = true;
+          m_matrix[src_index].at(dest_index) = true;
         }
       }
       // Increase size
       m_size += 1;
-      return &this;
+      return *this;
     };
   };
 
@@ -394,7 +394,7 @@ namespace SmallWorld{
     namespace {
       template <class E>
       size_t dfs_recurs(
-        const Map::Graph<E>& g, const string& node, const search_set& known,
+        const Map::Graph<E>& g, const string& node, search_set& known,
         const forest_map& forest, const search_cb& callback){
           known.insert(node);
           if(callback(node, known, forest)){
@@ -410,7 +410,7 @@ namespace SmallWorld{
 
       template <class E>
       size_t bfs_complete(
-        const Map::Graph<E>& g, const string& node, const search_set& known,
+        const Map::Graph<E>& g, const string& node, search_set& known,
         const forest_map& forest, const search_cb& callback){
           std::vector<string> level;
           known.insert(node);

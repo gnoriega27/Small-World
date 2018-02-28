@@ -28,10 +28,10 @@ namespace SmallWorld{
       bool hasNode(const E& e);
       bool hasEdge(const string& src, const string& dest);
       bool hasEdge(const E& src, const E& dest);
-      Graph* addNode(const string& key, const std::shared_ptr<E> e);
-      Graph* replaceNode(const string& key, const std::shared_ptr<E> e);
-      Graph* addEdge(const string& src, const string& dest);
-      Graph* addEdge(const E& src, const E& dest);
+      Graph<E>& addNode(const string& key, const std::shared_ptr<E> e);
+      Graph<E>& replaceNode(const string& key, const std::shared_ptr<E> e);
+      Graph<E>& addEdge(const string& src, const string& dest);
+      Graph<E>& addEdge(const E& src, const E& dest);
       std::vector<string> neighbours(const string& node);
       std::vector<string> neighbours(const E& e);
       short degree(const string& node);
@@ -41,9 +41,9 @@ namespace SmallWorld{
     private:
       const bool m_directed = false;
       const bool m_reflexive = false;
-      const std::unordered_map<string, std::pair<std::shared_ptr<E>, short>> m_nodes;
-      const std::unordered_map<short, string> m_indexes;
-      const std::vector<edge_vector> m_matrix;
+      std::unordered_map<string, std::pair<std::shared_ptr<E>, short>> m_nodes;
+      std::unordered_map<short, string> m_indexes;
+      std::vector<edge_vector> m_matrix;
       std::size_t m_size;
       std::vector<string> inNeighbours(const string& node);
       std::vector<string> outNeighbours(const string& node);
@@ -52,13 +52,13 @@ namespace SmallWorld{
       short getIndex(const string& key);
       short getIndex(const E& e);
       string getKey(const short index);
-      Graph* insertEdge(const short& src_index, const short& dest_index);
+      Graph<E>& insertEdge(const short& src_index, const short& dest_index);
     };
 
     namespace algorithm {
       using search_set = std::set<string>;
       using forest_map = std::unordered_map<string, std::pair<string, string>>;
-      using search_cb = std::function<bool(const string&, const search_set&, const forest_map&)>;
+      using search_cb = std::function<bool(const string&, search_set&, const forest_map&)>;
 
       template <class E>
       std::function<size_t(Graph<E>)> dfs(const string& start, const search_cb& callback);
@@ -69,13 +69,13 @@ namespace SmallWorld{
       namespace {
         template <class E>
         size_t dfs_recurs(
-          const Graph<E>& g, const string& node, const search_set& known,
+          const Graph<E>& g, const string& node, search_set& known,
           const forest_map& forest, const search_cb& callback
         );
 
         template <class E>
         size_t bfs_complete(
-          const Graph<E>& g, const string& node, const search_set& known,
+          const Graph<E>& g, const string& node, search_set& known,
           const forest_map& forest, const search_cb& callback
         );
       };

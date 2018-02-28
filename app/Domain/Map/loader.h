@@ -8,33 +8,20 @@
 #include <string>
 #include <fstream>
 #include <nlohmann/json.hpp>
-#include "../../Service/JSON/AJV.h"
-#include "Graph.h"
+#include "../../Services/JSON/AJV.h"
+#include "Graph.cpp"
 #include "../Region/Region.h"
 #include "../Region/RegionAttribute.h"
 #include "../Region/RegionType.h"
 
-using string = std::string;
-using json = nlohmann::json;
+using std::string;
+using nlohmann::json;
 
 namespace SmallWorld{
   namespace Map {
-    using Region = SmallWorld::Region;
-    using RegionAttribute = SmallWorld::RegionAttribute;
-    using RegionType = SmallWorld::RegionType;
-    using region_ptr = std::shared_ptr<Region>;
+    using SmallWorld::Region;
 
-    namespace {
-      json* readJSONFile(const string& path);
-
-      json* readMap(const string& path, const string& schema);
-
-      std::vector<std::pair<string, region_ptr>> extractRegions(const json& map);
-
-      std::vector<std::pair<string, string>> extractEdges(const json& map);
-    };
-
-    std::shared_ptr<Map::Graph<Region>> loadMap(const string& path, const string& schema = "./map.ajv.json");
+    std::shared_ptr<Map::Graph<Region>> loadMap(const string& map_path, const string& schema_path);
   };
 };
 

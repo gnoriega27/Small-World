@@ -3,30 +3,34 @@
 //
 #include "loader.h"
 
-using string = std::string;
-using json = nlohmann::json;
+using std::string;
+using nlohmann::json;
 
 namespace SmallWorld{
   namespace Map {
-    using Region = SmallWorld::Region;
-    using RegionAttribute = SmallWorld::RegionAttribute;
-    using RegionType = SmallWorld::RegionType;
+    using SmallWorld::Region;
+    using SmallWorld::RegionAttribute;
+    using SmallWorld::RegionType;
     using region_ptr = std::shared_ptr<Region>;
+    using SmallWorld::AJV;
 
     namespace {
       json* readJSONFile(const string& path) {
         std::ifstream i(path);
-        json* j = new json();
-        i >> *j;
-        return j;
+        json j;
+        i >> j;
+        return new json(j);
       };
 
-      json* readMap(const string& path, const string& schema) {
+      json* readMap(const string& map_path, const string& schema_path) {
         AJV ajv;
-        json* map = readJSONFile(path);
-        if(ajv.validate(readJSONFile(schema), map)){
+        json* schema = readJSONFile(schema_path);
+        json* map = readJSONFile(map_path);
+        if(ajv.validate(schema, map)){
+          delete schema;
           return map;
         }else{
+          delete schema;
           throw ajv.errors;
         }
       };
@@ -39,7 +43,7 @@ namespace SmallWorld{
           map["nodes"].end(),
           std::back_inserter(regions),
           [](const json& r) -> std::pair<string, region_ptr> {
-            return std::make_pair<string, region_ptr>(r["key"], std::make_shared<Region>(new Region(r)));
+            return std::make_pair<string, region_ptr>(r["key"], std::make_shared<Region>(r));
           }
         );
         return regions;
@@ -58,14 +62,14 @@ namespace SmallWorld{
       };
     };
 
-    std::shared_ptr<Map::Graph<Region>> loadMap(const string& path, const string& schema) {
+    std::shared_ptr<Map::Graph<Region>> loadMap(const string& path, const string& schema = "./map.ajv.json") {
       using Graph = SmallWorld::Map::Graph<Region>;
       json* map = readMap(path, schema);
       std::vector<std::pair<string, region_ptr>> regions = extractRegions(*map);
       std::vector<std::pair<string, string>> edges = extractEdges(*map);
-      std::shared_ptr<Graph> graph = std::make_shared<Graph>(new Graph(regions, edges));
+      std::shared_ptr<Graph> pgraph = std::make_shared<Graph>(regions, edges);
       delete map;
-      return graph;
+      return pgraph;
     };
   };
 };
