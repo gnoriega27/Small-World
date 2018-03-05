@@ -60,6 +60,11 @@ execute_process(COMMAND git submodule update --init -- vendor/FunctionalPlus
                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(vendor/FunctionalPlus/include)
 
+# Boost
+execute_process(COMMAND git submodule update --init --recursive -- vendor/boost
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(vendor/boost/include)
+
 ######################################
 # App
 ######################################

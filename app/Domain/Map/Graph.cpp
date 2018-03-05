@@ -25,25 +25,25 @@ namespace SmallWorld{
         for(const auto& edge : edges){
           addEdge(std::get<0>(edge), std::get<1>(edge));
         }
-    };
+    }
 
     /**
      * Returns the number of edges in the Graph
      */
     template <class E>
-    std::size_t Graph<E>::size() { return m_size; };
+    std::size_t Graph<E>::size() const { return m_size; }
 
     /**
      * Returns the number of nodes in the Graph
      */
     template <class E>
-    std::size_t Graph<E>::order() { return m_nodes.size(); };
+    std::size_t Graph<E>::order() const { return m_nodes.size(); }
 
     /**
      * Returns whether the Graph is directed or not
      */
     template <class E>
-    bool Graph<E>::directed() { return m_directed; };
+    bool Graph<E>::directed() const { return m_directed; }
 
     /**
      * Node existence lookup based on key of the Node
@@ -51,9 +51,9 @@ namespace SmallWorld{
      * @param e Element in the node
      */
     template <class E>
-    bool Graph<E>::hasNode(const string& s){
+    bool Graph<E>::hasNode(const string& s) const {
       return m_nodes.find(s) != m_nodes.end();
-    };
+    }
 
     /**
      * Node existence lookup based on element on the Node
@@ -61,14 +61,14 @@ namespace SmallWorld{
      * @param e Element in the node
      */
     template <class E>
-    bool Graph<E>::hasNode(const E& e) {
+    bool Graph<E>::hasNode(const E& e) const {
       for(const auto& node : m_nodes) {
         if(e == *(node.second)){
           return true;
         }
       }
       return false;
-    };
+    }
 
     /**
      * Edge existence lookup based on key of the Node
@@ -77,12 +77,12 @@ namespace SmallWorld{
      * @param dest destination node key
      */
     template <class E>
-    bool Graph<E>::hasEdge(const string& src, const string& dest) {
+    bool Graph<E>::hasEdge(const string& src, const string& dest) const {
       if(!hasNode(src) || !hasNode(dest)) {
         return false;
       }
       return m_matrix[getIndex(src)][getIndex(dest)];
-    };
+    }
 
     /**
      * Edge existence lookup based on element of the Node
@@ -91,12 +91,12 @@ namespace SmallWorld{
      * @param dest destination node element
      */
     template <class E>
-    bool Graph<E>::hasEdge(const E& src, const E& dest) {
+    bool Graph<E>::hasEdge(const E& src, const E& dest) const {
       if(!hasNode(src) || !hasNode(dest)) {
         return false;
       }
       return m_matrix[getIndex(src)][getIndex(dest)];
-    };
+    }
 
     /**
      * Adds a node with element e at key key. Expands the matrix to accommodate
@@ -120,7 +120,7 @@ namespace SmallWorld{
       std::vector<bool> edges(m_matrix.size() + 1, false);
       m_matrix.push_back(edges);
       return *this;
-    };
+    }
 
     /**
      * Replaces the Node element at key key with element e
@@ -136,7 +136,7 @@ namespace SmallWorld{
       std::pair<std::shared_ptr<E>, short>* node = &(m_nodes[key]);
       node->first = e;
       return *this;
-    };
+    }
 
     /**
      * Adds an edge from node src to node dest
@@ -153,7 +153,7 @@ namespace SmallWorld{
         throw std::invalid_argument("Node '" + dest + "' does not exist in Graph");
       }
       return insertEdge(getIndex(src), getIndex(dest));
-    };
+    }
 
     /**
      * Adds an edge from node src to node dest
@@ -170,35 +170,35 @@ namespace SmallWorld{
         throw std::invalid_argument("Node '" + dest + "' does not exist in Graph");
       }
       return insertEdge(getIndex(src), getIndex(dest));
-    };
+    }
 
 
     template <class E>
-    std::vector<string> Graph<E>::neighbours(const string& node){
+    std::vector<string> Graph<E>::neighbours(const string& node) const {
       std::vector<string> nbs;
       const std::vector<string> in = inNeighbours(node);
       const std::vector<string> out = outNeighbours(node);
       nbs.insert(nbs.end(), in.begin(), in.end());
       nbs.insert(nbs.end(), out.begin(), out.end());
       return nbs;
-    };
+    }
 
     template <class E>
-    std::vector<string> Graph<E>::neighbours(const E& e){
+    std::vector<string> Graph<E>::neighbours(const E& e) const {
       return neighbours(getKey(getIndex(e)));
-    };
+    }
 
     template <class E>
-    short Graph<E>::degree(const string& node){
+    short Graph<E>::degree(const string& node) const {
       return inDegree(node) + outDegree(node);
-    };
+    }
 
     /**
      * Returns an unordered list of nodes
      * @complexity O(order)
      */
     template <class E>
-    std::vector<std::pair<string, std::shared_ptr<E>>> Graph<E>::nodes() {
+    std::vector<std::pair<string, std::shared_ptr<E>>> Graph<E>::nodes() const {
       std::vector<std::pair<string, std::shared_ptr<E>>> nodes;
       nodes.reserve(m_nodes.size());
       short count = 0;
@@ -206,14 +206,14 @@ namespace SmallWorld{
         nodes.assign(count++, std::make_pair<string, std::shared_ptr<E>>(node.first, node.second.first));
       }
       return nodes;
-    };
+    }
 
     /**
      * Returns an unordered list of nodes
      * @complexity O(order + size)
      */
     template <class E>
-    std::vector<std::pair<string, string>> Graph<E>::edges() {
+    std::vector<std::pair<string, string>> Graph<E>::edges() const {
       const short order = m_indexes.size();
       std::vector<std::pair<string, string>> edges;
       edges.reserve(m_size);
@@ -226,7 +226,7 @@ namespace SmallWorld{
           // only the ones at the lower half and you are good
           for(short i = index.first; i < order; ++i){
             if(m_matrix[index.first][i]){
-              edges.push_back(std::make_pair<string, string>(index.second, m_indexes[i].second));
+              edges.push_back(std::make_pair(index.second, m_indexes.at(i)));
             }
           }
         }
@@ -235,16 +235,16 @@ namespace SmallWorld{
         for(szt i = 0; i < m_matrix.size(); i++) {
           for(szt j = 0; j < m_matrix[i].size(); j++){
             if(m_matrix[i][j]){
-              edges.push_back(std::make_pair<string, string>(m_indexes[i].second, m_indexes[j].second));
+              edges.push_back(std::make_pair(m_indexes.at(i), m_indexes.at(j)));
             }
           }
         }
       }
       return edges;
-    };
+    }
 
     template <class E>
-    std::vector<string> Graph<E>::inNeighbours(const string& node){
+    std::vector<string> Graph<E>::inNeighbours(const string& node) const {
       using szt = std::vector<int>::size_type;
       std::vector<string> nbs;
       const short index = getIndex(node);
@@ -259,7 +259,7 @@ namespace SmallWorld{
     }
 
     template <class E>
-    std::vector<string> Graph<E>::outNeighbours(const string& node){
+    std::vector<string> Graph<E>::outNeighbours(const string& node) const {
       using szt = std::vector<int>::size_type;
       std::vector<string> nbs;
       const short index = getIndex(node);
@@ -271,14 +271,14 @@ namespace SmallWorld{
         }
       }
       return nbs;
-    };
+    }
 
     /**
      * Returns the in degree (edges inbound) of the specified node
      * @param node
      */
     template <class E>
-    short Graph<E>::inDegree(const string& node) {
+    short Graph<E>::inDegree(const string& node) const {
       using szt = std::vector<int>::size_type;
       short deg = 0;
       const short index = getIndex(node);
@@ -290,14 +290,14 @@ namespace SmallWorld{
         }
       }
       return deg;
-    };
+    }
 
     /**
      * Returns the out degree (edges outbound) of the specified node
      * @param node [description]
      */
     template <class E>
-    short Graph<E>::outDegree(const string& node) {
+    short Graph<E>::outDegree(const string& node) const {
       using szt = std::vector<int>::size_type;
       short deg = 0;
       const short index = getIndex(node);
@@ -309,38 +309,38 @@ namespace SmallWorld{
         }
       }
       return deg;
-    };
+    }
 
     /**
      * Returns the m_matrix numeric index
      * @param key Key of the node
      */
     template <class E>
-    short Graph<E>::getIndex(const string& key) {
+    short Graph<E>::getIndex(const string& key) const {
       return m_nodes.at(key).second;
-    };
+    }
 
     /**
      * Returns the m_matrix numeric index
      * @param e Element of the node
      */
     template <class E>
-    short Graph<E>::getIndex(const E& e) {
+    short Graph<E>::getIndex(const E& e) const {
       for(const auto& node : m_nodes) {
         if(e == *(node.second.first)){
           return node.second.second;
         }
       }
-    };
+    }
 
     /**
      * Returns the associated key with the numeric index
      * @param index Numeric index of the node
      */
     template <class E>
-    string Graph<E>::getKey(const short index) {
+    string Graph<E>::getKey(const short index) const {
       return m_indexes.at(index);
-    };
+    }
 
     template <class E>
     Graph<E>& Graph<E>::insertEdge(const short& src_index, const short& dest_index) {
@@ -365,74 +365,70 @@ namespace SmallWorld{
       // Increase size
       m_size += 1;
       return *this;
-    };
-  };
+    }
 
-  namespace algorithm {
-    using search_set = std::set<string>;
-    using forest_map = std::unordered_map<string, std::pair<string, string>>;
-    using search_cb = std::function<bool(const string&, const search_set&, const forest_map&)>;
-
-    template <class E>
-    std::function<size_t(Map::Graph<E>)> dfs(const string& start, const search_cb& callback) {
-      return [start, callback](const Map::Graph<E>& g){
-        search_set known;
-        forest_map forest;
-        return dfs_recurs(g, start, known, forest, callback);
-      };
-    };
-
-    template <class E>
-    std::function<size_t(Map::Graph<E>)> bfs(const string& start, const search_cb& callback) {
-      return [start, callback](const Map::Graph<E>& g){
-        search_set known;
-        forest_map forest;
-        return bfs_complete(g, start, known, forest, callback);
-      };
-    };
-
-    namespace {
+    namespace algorithm {
       template <class E>
-      size_t dfs_recurs(
-        const Map::Graph<E>& g, const string& node, search_set& known,
-        const forest_map& forest, const search_cb& callback){
-          known.insert(node);
-          if(callback(node, known, forest)){
-            for(const auto& n : g.neighbours(node)){
-              if(known.find(n) != known.end()){
-                forest[n] = std::make_pair<string, string>(node, n);
-                dfs_recurs(g, n, known, forest, callback);
+      std::function<size_t(Map::Graph<E>)> dfs(const string& start, const search_cb& callback) {
+        return [start, callback](const Map::Graph<E>& g){
+          search_set known;
+          forest_map forest;
+          return dfs_recurs(g, start, known, forest, callback);
+        };
+      }
+
+      template <class E>
+      std::function<size_t(Map::Graph<E>)> bfs(const string& start, const search_cb& callback) {
+        return [start, callback](const Map::Graph<E>& g){
+          search_set known;
+          forest_map forest;
+          return bfs_complete(g, start, known, forest, callback);
+        };
+      }
+
+      namespace {
+        template <class E>
+        size_t dfs_recurs(
+          const Map::Graph<E>& g, const string& node, search_set& known,
+          forest_map& forest, const search_cb& callback){
+            known.insert(node);
+            if(callback(node, known, forest)){
+              for(const auto& n : g.neighbours(node)){
+                if(known.find(n) != known.end()){
+                  forest[n] = std::make_pair(node, n);
+                  dfs_recurs(g, n, known, forest, callback);
+                }
               }
-            }
-          };
-          return known.size();
-      };
+            };
+            return known.size();
+        }
 
-      template <class E>
-      size_t bfs_complete(
-        const Map::Graph<E>& g, const string& node, search_set& known,
-        const forest_map& forest, const search_cb& callback){
-          std::vector<string> level;
-          known.insert(node);
-          level.push_back(node);
-          if(callback(node, known, forest)){
-            while(!level.empty()){
-              std::vector<string> next_level;
-              for(const auto& n : level){
-                if(callback(n, known, forest)){
-                  for(const auto& nb : g.neighbours()){
-                    if(known.find(nb) != known.end()){
-                      forest[nb] = std::make_pair<string, string>(n, nb);
-                      next_level.push_back(nb);
+        template <class E>
+        size_t bfs_complete(
+          const Map::Graph<E>& g, const string& node, search_set& known,
+          forest_map& forest, const search_cb& callback){
+            std::vector<string> level;
+            known.insert(node);
+            level.push_back(node);
+            if(callback(node, known, forest)){
+              while(!level.empty()){
+                std::vector<string> next_level;
+                for(const auto& n : level){
+                  if(callback(n, known, forest)){
+                    for(const auto& nb : g.neighbours()){
+                      if(known.find(nb) != known.end()){
+                        forest[nb] = std::make_pair(n, nb);
+                        next_level.push_back(nb);
+                      }
                     }
-                  }
-                };
+                  };
+                }
+                level = next_level;
               }
-              level = next_level;
             }
-          }
-          return known.size();
-      };
-    };
-  };
-};
+            return known.size();
+        }
+      }
+    }
+  }
+}

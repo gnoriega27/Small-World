@@ -5,6 +5,9 @@ add_executable(
     main.cpp
     test.cpp
     integration/Map/map.test.cpp
+    ../app/Services/JSON/AJV.cpp
+    ../app/Domain/Map/Graph.cpp
+    ../app/Domain/Region/Region.cpp
 )
 
 target_include_directories(Small-World-Test PUBLIC ../vendor/googletest/googletest/include

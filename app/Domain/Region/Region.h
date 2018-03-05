@@ -33,6 +33,6 @@ namespace SmallWorld{
     static RegionAttribute parseRegionAttribute(const string& attribute);
     static RegionType parseRegionType(const string& type);
   };
-};
+}
 
 #endif // SMALLWORLD_REGION_H

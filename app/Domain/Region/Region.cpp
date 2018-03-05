@@ -26,7 +26,7 @@ namespace SmallWorld {
     }else{
       throw std::invalid_argument("Unknown region attribute string '" + attribute + "'");
     }
-  };
+  }
 
   SmallWorld::RegionType SmallWorld::Region::parseRegionType(const string& type) {
     string t;
@@ -48,7 +48,7 @@ namespace SmallWorld {
     }else{
       throw std::invalid_argument("Unknown region type string '" + type + "'");
     }
-  };
+  }
 
   SmallWorld::Region::Region(json j) {
     m_key = j["key"].get<string>();
@@ -58,6 +58,6 @@ namespace SmallWorld {
     m_border = j["border"].get<bool>();
     m_center = std::make_pair<int, int>(j["center"]["x"].get<int>(), j["center"]["y"].get<int>());
     m_occupiedBy = "";
-  };
+  }
 
-};
+}

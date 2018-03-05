@@ -17,6 +17,6 @@ namespace SmallWorld {
     MINE,
     DEFAULT
   };
-};
+}
 
 #endif // SMALLWORLD_REGION_ATTRIBUTE_H

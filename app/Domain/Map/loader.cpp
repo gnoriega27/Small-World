@@ -20,56 +20,56 @@ namespace SmallWorld{
         json j;
         i >> j;
         return new json(j);
-      };
+      }
 
       json* readMap(const string& map_path, const string& schema_path) {
         AJV ajv;
         json* schema = readJSONFile(schema_path);
-        json* map = readJSONFile(map_path);
-        if(ajv.validate(schema, map)){
+        json* jmap = readJSONFile(map_path);
+        if(ajv.validate(schema, jmap)){
           delete schema;
-          return map;
+          return jmap;
         }else{
           delete schema;
           throw ajv.errors;
         }
-      };
+      }
 
-      std::vector<std::pair<string, region_ptr>> extractRegions(const json& map) {
+      std::vector<std::pair<string, region_ptr>> extractRegions(const json& jmap) {
         std::vector<std::pair<string, region_ptr>> regions;
-        regions.reserve(map["nodes"].size());
+        regions.reserve(jmap["nodes"].size());
         std::transform(
-          map["nodes"].begin(),
-          map["nodes"].end(),
+          jmap["nodes"].begin(),
+          jmap["nodes"].end(),
           std::back_inserter(regions),
           [](const json& r) -> std::pair<string, region_ptr> {
             return std::make_pair<string, region_ptr>(r["key"], std::make_shared<Region>(r));
           }
         );
         return regions;
-      };
+      }
 
-      std::vector<std::pair<string, string>> extractEdges(const json& map) {
+      std::vector<std::pair<string, string>> extractEdges(const json& jmap) {
         std::vector<std::pair<string, string>> edges;
-        edges.reserve(map["edges"].size());
+        edges.reserve(jmap["edges"].size());
         std::transform(
-          map["edges"].begin(),
-          map["edges"].end(),
+          jmap["edges"].begin(),
+          jmap["edges"].end(),
           std::back_inserter(edges),
           [](const json& edge){ return std::make_pair<string, string>(edge["source"], edge["target"]); }
         );
         return edges;
-      };
-    };
+      }
+    }
 
     std::shared_ptr<Map::Graph<Region>> loadMap(const string& path, const string& schema = "./map.ajv.json") {
       using Graph = SmallWorld::Map::Graph<Region>;
-      json* map = readMap(path, schema);
-      std::vector<std::pair<string, region_ptr>> regions = extractRegions(*map);
-      std::vector<std::pair<string, string>> edges = extractEdges(*map);
+      json* jmap = readMap(path, schema);
+      std::vector<std::pair<string, region_ptr>> regions = extractRegions(*jmap);
+      std::vector<std::pair<string, string>> edges = extractEdges(*jmap);
       std::shared_ptr<Graph> pgraph = std::make_shared<Graph>(regions, edges);
-      delete map;
+      delete jmap;
       return pgraph;
-    };
-  };
-};
+    }
+  }
+}

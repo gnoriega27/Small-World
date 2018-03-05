@@ -18,6 +18,6 @@ namespace SmallWorld {
     json m_schema;
     std::function<bool(json*)> m_validator;
   };
-};
+}
 
 #endif // SMALLWORLD_AJV_H

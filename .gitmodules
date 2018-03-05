@@ -10,3 +10,6 @@
 [submodule "vendor/FunctionalPlus"]
 	path = vendor/FunctionalPlus
 	url = https://github.com/Dobiasd/FunctionalPlus
+[submodule "vendor/boost"]
+	path = vendor/boost
+	url = https://github.com/boostorg/boost.git

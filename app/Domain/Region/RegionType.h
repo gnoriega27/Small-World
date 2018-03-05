@@ -14,6 +14,6 @@ namespace SmallWorld {
     SEA,
     SWAMP
   };
-};
+}
 
 #endif // SMALLWORLD_REGION_TYPE_H

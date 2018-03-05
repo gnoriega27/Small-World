@@ -8,7 +8,7 @@ using nlohmann::json;
 
 namespace SmallWorld {
   std::function<bool(json*)> AJV::compile(json* schema) {
-    return [](json* map){ return true; };
+    return [](json* data){ return true; };
   };
   bool AJV::validate(json* schema, json* data){ return true; };
 };

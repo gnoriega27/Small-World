@@ -22,7 +22,7 @@ namespace SmallWorld{
     using SmallWorld::Region;
 
     std::shared_ptr<Map::Graph<Region>> loadMap(const string& map_path, const string& schema_path);
-  };
-};
+  }
+}
 
 #endif // SMALLWORLD_MAP_LOADER_H

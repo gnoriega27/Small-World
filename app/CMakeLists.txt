@@ -9,6 +9,7 @@ add_executable(
     Domain/Region/Region.h
     Domain/Map/Graph.h
     Domain/Map/loader.h
+    Services/JSON/AJV.h
 )
 
 include_directories(
